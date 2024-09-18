@@ -1,5 +1,7 @@
+import { User } from './user.entity';
 
+export {
+    User,
+}
 
-export const entities = [
-
-]
+export const entities = [User];
