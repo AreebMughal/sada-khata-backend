@@ -10,10 +10,11 @@ async function bootstrap() {
     .setTitle('Sada khata - API Documentation')
     .setDescription('API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
     
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document); // Swagger UI will be accessible at /api-docs
+  SwaggerModule.setup('api', app, document); // Swagger UI will be accessible at /api-docs
 
 
   const port = process.env.PORT || 5000
