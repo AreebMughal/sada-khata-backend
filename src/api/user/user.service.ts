@@ -34,13 +34,11 @@ export class UserService {
     if (existingUser) {
       throw new BadRequestException('Username already in use');
     }
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create and save user
     const user = this.userRepository.create({
       ...createUserDto,
-      password: hashedPassword,
+      password,
     });
     return this.userRepository.save(user);
   }

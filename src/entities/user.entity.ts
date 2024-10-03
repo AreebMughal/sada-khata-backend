@@ -1,10 +1,11 @@
+import { ObjectId } from 'mongodb';
 import { ROLE_TYPE } from 'src/constants/user.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ObjectIdColumn } from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @ObjectIdColumn()
+  _id: ObjectId;
 
   @Column({ type: 'varchar', length: 255 })
   firstname: string;
@@ -20,4 +21,9 @@ export class User {
 
   @Column({ type: 'enum', enum: ROLE_TYPE, default: ROLE_TYPE.USER })
   type: ROLE_TYPE;
+
+  // Virtual field to map `_id` to `id`
+  get id(): string {
+    return this._id.toHexString();  // Converts ObjectID to string
+  }
 }
