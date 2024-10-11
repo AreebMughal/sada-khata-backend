@@ -39,5 +39,8 @@ jobs:
           git pull origin main
           npm install
           npm run build
+
+          echo "${{ secrets.MAIN_ENV }}" > .env
+
           cd ..
           pm2 restart ecosystem.config.js
