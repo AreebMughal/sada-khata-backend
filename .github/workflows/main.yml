@@ -40,7 +40,9 @@ jobs:
           npm install
           npm run build
 
-          echo "${{ secrets.MAIN_ENV }}" > .env
+          cat > .env << EOF
+          ${{ secrets.MAIN_ENV }}
+          EOF
 
           cd ..
           pm2 restart ecosystem.config.js
