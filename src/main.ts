@@ -21,6 +21,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  app.enableCors();
+  
   const port = process.env.PORT || 5000;
   await app.listen(port);
 
