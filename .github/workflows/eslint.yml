@@ -20,12 +20,12 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: Run ESLint and Save Output
+    - name: Run ESLint and Convert Output to rdjson
       run: |
-        npx eslint "src/**/*.ts" --format json > eslint-report.json || exit 0
+        npx eslint "src/**/*.ts" --format json | jq -c '{source: "eslint", diagnostics: .}' > eslint-report.rdjson || exit 0
 
-    - name: Check ESLint Output
-      run: cat eslint-report.json  # Ensure valid JSON is produced
+    - name: Check rdjson Output
+      run: cat eslint-report.rdjson
 
     - name: Run Reviewdog with ESLint Output
       uses: reviewdog/action-eslint@v1
@@ -33,5 +33,5 @@ jobs:
         reporter: 'github-pr-review'
         level: 'error'
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        eslint_flags: '--format json eslint-report.json'
+        input: eslint-report.rdjson
         filter_mode: 'added'
