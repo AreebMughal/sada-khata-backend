@@ -20,16 +20,18 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: Run ESLint
-      id: eslint
+    - name: Run ESLint and Save Output
       run: |
         npx eslint "src/**/*.ts" --format json > eslint-report.json || exit 0
 
-    - name: Run Reviewdog
+    - name: Check ESLint Output
+      run: cat eslint-report.json  # Ensure valid JSON is produced
+
+    - name: Run Reviewdog with ESLint Output
       uses: reviewdog/action-eslint@v1
       with:
         reporter: 'github-pr-review'
         level: 'error'
-        eslint_flags: '--format json'
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        eslint_flags: '--format json eslint-report.json'
         filter_mode: 'added'
