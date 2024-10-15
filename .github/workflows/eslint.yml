@@ -7,6 +7,9 @@ on:
 jobs:
   eslint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write  # Grant write permissions to post comments
 
     steps:
     - name: Checkout Code
@@ -20,18 +23,11 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: Run ESLint and Convert Output to rdjson
-      run: |
-        npx eslint "src/**/*.ts" --format json | jq -c '{source: "eslint", diagnostics: .}' > eslint-report.rdjson || exit 0
-
-    - name: Check rdjson Output
-      run: cat eslint-report.rdjson
-
-    - name: Run Reviewdog with ESLint Output
+    - name: Run ESLint with Reviewdog
       uses: reviewdog/action-eslint@v1
       with:
         reporter: 'github-pr-review'
         level: 'error'
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        input: eslint-report.rdjson
+        eslint_flags: '--format json'
         filter_mode: 'added'
