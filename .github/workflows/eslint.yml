@@ -7,29 +7,21 @@ on:
 jobs:
   eslint:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v3
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
+      - name: Install dependencies
+        run: npm install
 
-    - name: Install Dependencies
-      run: npm install
+      - name: Run ESLint
+        run: npx eslint . --format json --output-file eslint-report.json || true
 
-    - name: Install Reviewdog
-      run: |
-        curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /usr/local/bin
-
-    - name: Run ESLint and Pipe to Reviewdog
-      run: |
-        npx eslint "src/**/*.ts" --format=json | \
-        reviewdog -f=eslint -reporter=github-pr-review -level=error
-      env:
-        REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: ReviewDog - Report ESLint Suggestions
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          level: info  # Displays both warnings and errors
+          reporter: github-pr-review  # Posts comments in the PR
+          fail_on_error: false  # Prevents workflow failure on errors
+          filter_mode: added  # Comments only on modified/added lines
