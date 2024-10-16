@@ -15,7 +15,13 @@ jobs:
         run: npm install
 
       - name: Run ESLint
-        run: npx eslint . --format json --output-file eslint-report.json || true
+        run: |
+          npx eslint . --format json --output-file eslint-report.json
+          # Fail the job if there are any issues
+          if [ $(jq length < eslint-report.json) -gt 0 ]; then
+            echo "ESLint found issues!"
+            exit 1
+          fi
 
       - name: ReviewDog - Report ESLint Suggestions
         uses: reviewdog/action-eslint@v1
@@ -23,5 +29,5 @@ jobs:
           github_token: ${{ secrets.ESLINT_TOKEN }}
           level: info  # Show both warnings and errors
           reporter: github-pr-review  # Post comments in the PR
-          fail_on_error: false  # Do not fail the workflow on ESLint errors
+          fail_on_error: true  # Do not fail the workflow on ESLint errors
           filter_mode: added  # Only show comments on added/modified lines
