@@ -31,3 +31,18 @@ jobs:
           reporter: github-pr-review  # Post comments in the PR
           fail_on_error: true  # Do not fail the workflow on ESLint errors
           filter_mode: added  # Only show comments on added/modified lines
+
+
+  block_merge:
+    runs-on: ubuntu-latest
+    needs: eslint  # Only run if ESLint check passes
+    steps:
+      - name: Check ESLint Report and Block Merge
+        run: |
+          # Check if there are any ESLint warnings or errors
+          if [ $(jq '[.[] | select(.severity >= 1)] | length' < eslint-report.json) -gt 0 ]; then
+            echo "::error::PR contains ESLint warnings or errors. Merge blocked."
+            exit 1
+          else
+            echo "No ESLint issues found. Proceed with merge."
+          fi
