@@ -17,7 +17,6 @@ jobs:
       - name: Run ESLint
         run: |
           npx eslint . --format json --output-file eslint-report.json
-          cat eslint-report.json  # Debug step
 
       - name: ReviewDog - Report ESLint Suggestions
         uses: reviewdog/action-eslint@v1
