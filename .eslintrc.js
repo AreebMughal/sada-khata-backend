@@ -7,6 +7,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
+    'plugin:unicorn/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier'
@@ -26,6 +27,9 @@ module.exports = {
     "camelcase": "error",
     "prefer-const": "error",
     "no-var": "error",
+    'unicorn/prefer-ternary': 'error', // Suggest using ternary if applicable
+    'unicorn/consistent-function-scoping': 'warn', // Avoid unnecessary scope changes
+
     // "import/order": [
     //   "error",
     //   {
