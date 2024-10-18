@@ -21,20 +21,20 @@ jobs:
         uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.ESLINT_TOKEN }}
-          # github_token: ${{ secrets.GITHUB_TOKEN  }}
           level: info  # Show both warnings and errors
           reporter: github-pr-review  # Post comments in the PR
-          fail_on_error: true  # Do not fail the workflow on ESLint errors
+          fail_on_error: false  # Ensure workflow doesn't stop on errors
           filter_mode: added  # Only show comments on added/modified lines
-
 
   block_merge:
     runs-on: ubuntu-latest
     needs: eslint  # Only run if ESLint check passes
     steps:
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
       - name: Check ESLint Report and Block Merge
         run: |
-          # Check if there are any ESLint warnings or errors
           if [ $(jq '[.[] | select(.severity >= 1)] | length' < eslint-report.json) -gt 0 ]; then
             echo "::error::PR contains ESLint warnings or errors. Merge blocked."
             exit 1
