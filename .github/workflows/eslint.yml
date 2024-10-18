@@ -26,11 +26,12 @@ jobs:
       - name: ReviewDog - Report ESLint Suggestions
         uses: reviewdog/action-eslint@v1
         with:
-          github_token: ${{ secrets.ESLINT_TOKEN }}
+          # github_token: ${{ secrets.ESLINT_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN  }}
           level: info  # Show both warnings and errors
           reporter: github-pr-review  # Post comments in the PR
           fail_on_error: true  # Do not fail the workflow on ESLint errors
-          filter_mode: nofilter  # Only show comments on added/modified lines
+          filter_mode: added  # Only show comments on added/modified lines
 
 
   block_merge:

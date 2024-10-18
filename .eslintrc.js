@@ -29,13 +29,5 @@ module.exports = {
     "no-var": "error",
     'unicorn/prefer-ternary': 'error', // Suggest using ternary if applicable
     'unicorn/consistent-function-scoping': 'warn', // Avoid unnecessary scope changes
-
-    // "import/order": [
-    //   "error",
-    //   {
-    //     "groups": [["builtin", "external"], ["internal", "sibling", "parent"]],
-    //     "newlines-between": "always"
-    //   }
-    // ]
   },
 };
