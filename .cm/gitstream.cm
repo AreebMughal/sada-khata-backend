@@ -18,7 +18,7 @@ automations:
   # Inform PR authors when they fail to reference Jira tickets in the PR title or description.
   label_missing_jira_info:
     if:
-      - {{ not (has.jira_ticket_in_title or has.jira_ticket_in_desc) }}
+      - {{ not (has.jira_ticket_in_desc) }}
     run:
       - action: add-label@v1
         args:
@@ -48,7 +48,6 @@ calc:
   etr: {{ branch | estimatedReviewTime }}
 
 has:
-  jira_ticket_in_title: {{ pr.title | includes(regex=r/\b[A-Za-z]+-\d+\b/) }}
   jira_ticket_in_desc: {{ pr.description | includes(regex=r/app\.clickup\.com\/t\/[a-zA-Z0-9]+/) }}
 
 colors:
