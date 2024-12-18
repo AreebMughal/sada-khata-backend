@@ -8,14 +8,6 @@ automations:
     if:
       - true  # This runs whenever there is a new commit in the PR
     run:
-      # Remove only cm-changes or estimated time labels if needed (specific labels)
-      - action: remove-label@v1
-        args:
-          label: "estimated-time-to-review"  # Replace with actual label name if needed
-      - action: remove-label@v1
-        args:
-          label: "cm-changes"  # Remove only cm-changes label when updating
-
       # Add cm-changes label after removing it (or after a commit push)
       - action: add-label@v1
         args:
