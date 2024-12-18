@@ -8,11 +8,12 @@ automations:
     if:
       - true  # This runs whenever there is a new commit in the PR
     run:
-      # Add cm-changes label after removing it (or after a commit push)
+      # Add cm-changes label only if it doesn't exist
       - action: add-label@v1
         args:
           label: "cm-changes"
           color: {{ colors.blue }}
+        condition: "{{ not has.cm_changes_label }}"  # Only add if cm-changes is not already applied
 
       # Ensure missing-jira label stays intact unless explicitly removed or added
       - action: add-label@v1
@@ -20,6 +21,11 @@ automations:
           label: "missing-jira"
           color: {{ colors.red }}
         condition: "{{ not has.jira_ticket_in_desc }}"  # Only add if no Jira ticket is referenced
+
+      # Debug information
+      - action: add-comment@v1
+        args:
+          comment: "Debug: Missing Jira Ticket in PR description? {{ not has.jira_ticket_in_desc }}"
 
   # Inform PR authors when they fail to reference Jira tickets in the PR title or description.
   label_missing_jira_info:
@@ -35,28 +41,26 @@ automations:
           comment: |
             This PR is missing a Jira ticket reference in the title or description.
             Please add a Jira ticket reference to the title or description of this PR.
-  # Post a comment that lists the best experts for the files that were modified.
-  explain_code_experts:
+
+  # Estimate Review Time (this might need to be adjusted for your branch context)
+  estimated_time_to_review:
     if:
       - true
     run:
-      - action: explain-code-experts@v1 
+      - action: add-label@v1
         args:
-          gt: 10 
+          label: "{{ calc.etr }} min review"
+          color: {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
 
-
-# +----------------------------------------------------------------------------+
-# | Custom Expressions                                                         |
-# | https://docs.gitstream.cm/how-it-works/#custom-expressions                 |
-# +----------------------------------------------------------------------------+
+# Custom expressions (optional for color handling)
+has:
+  cm_changes_label: {{ pr.labels | includes("cm-changes") }}  # Check if cm-changes label is present
+  jira_ticket_in_desc: {{ pr.description | includes(regex=r/app\.clickup\.com\/t\/[a-zA-Z0-9]+/) }}  # Check for ClickUp ticket
 
 calc:
-  etr: {{ branch | estimatedReviewTime }}
-
-has:
-  jira_ticket_in_desc: {{ pr.description | includes(regex=r/app\.clickup\.com\/t\/[a-zA-Z0-9]+/) }}
+  etr: {{ branch | estimatedReviewTime }}  # Estimate review time
 
 colors:
   red: 'b60205'
+  blue: '0366d6'
   yellow: 'fbca04'
-  green: '0e8a16'
