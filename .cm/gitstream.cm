@@ -8,7 +8,7 @@ automations:
     if:
       - true  # This runs whenever there is a new commit in the PR
     run:
-    - action: add-label@v1
+      - action: add-label@v1
         args:
           label: "something"
           color: {{ colors.red }}
