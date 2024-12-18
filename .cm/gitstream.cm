@@ -1,24 +1,38 @@
 # -*- mode: yaml -*-
-# This example configuration provides basic automations to get started with gitStream.
-# View the gitStream quickstart for more examples: https://docs.gitstream.cm/examples/
 manifest:
   version: 1.0
 
-
 automations:
-  # Add a label that indicates how many minutes it will take to review the PR.
-  estimated_time_to_review:
+  # Add cm-changes label and update estimated time when a commit is pushed
+  update_labels_on_commit:
     if:
-      - true
+      - true  # This runs whenever there is a new commit in the PR
     run:
+      # Remove only cm-changes or estimated time labels if needed (specific labels)
+      - action: remove-label@v1
+        args:
+          label: "estimated-time-to-review"  # Replace with actual label name if needed
+      - action: remove-label@v1
+        args:
+          label: "cm-changes"  # Remove only cm-changes label when updating
+
+      # Add cm-changes label after removing it (or after a commit push)
       - action: add-label@v1
         args:
-          label: "{{ calc.etr }} min review"
-          color: {{ colors.red if (calc.etr >= 20) else ( colors.yellow if (calc.etr >= 5) else colors.green ) }}
+          label: "cm-changes"
+          color: {{ colors.blue }}
+
+      # Ensure missing-jira label stays intact unless explicitly removed or added
+      - action: add-label@v1
+        args:
+          label: "missing-jira"
+          color: {{ colors.red }}
+        condition: "{{ not has.jira_ticket_in_desc }}"  # Only add if no Jira ticket is referenced
+
   # Inform PR authors when they fail to reference Jira tickets in the PR title or description.
   label_missing_jira_info:
     if:
-      - {{ not (has.jira_ticket_in_desc) }}
+      - {{ not has.jira_ticket_in_desc }}  # If no Jira ticket in description
     run:
       - action: add-label@v1
         args:
