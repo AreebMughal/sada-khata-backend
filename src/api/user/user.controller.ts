@@ -37,6 +37,7 @@ export class UserController {
   async CreateUser(@Body() createUserDto: CreateUserDto) {
     const HelloThere = {
       username: 'HelloThere',
+      hii: 's',
     };
     console.log('HelloThere', HelloThere);
     return this.userService.createUser(createUserDto);
