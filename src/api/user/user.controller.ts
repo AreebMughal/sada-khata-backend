@@ -1,8 +1,21 @@
-import { Controller, Post, Body, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
@@ -21,7 +34,11 @@ export class UserController {
   @Roles(ROLE_TYPE.SUPER_ADMIN)
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({ status: 201, description: 'User created successfully.' })
-  async createUser(@Body() createUserDto: CreateUserDto) {
+  async CreateUser(@Body() createUserDto: CreateUserDto) {
+    const HelloThere = {
+      username: 'HelloThere',
+    };
+    console.log('HelloThere', HelloThere);
     return this.userService.createUser(createUserDto);
   }
 
@@ -30,7 +47,10 @@ export class UserController {
   @Roles(ROLE_TYPE.SUPER_ADMIN, ROLE_TYPE.USER)
   @ApiOperation({ summary: 'Update user details' })
   @ApiResponse({ status: 200, description: 'User updated successfully.' })
-  async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.userService.updateUser(id, updateUserDto);
   }
 
@@ -48,7 +68,10 @@ export class UserController {
   @Roles(ROLE_TYPE.USER)
   @ApiOperation({ summary: 'Change user password' })
   @ApiResponse({ status: 200, description: 'Password changed successfully.' })
-  async changePassword(@Param('id') id: string, @Body() changePasswordDto: ChangePasswordDto) {
+  async changePassword(
+    @Param('id') id: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
     return this.userService.changePassword(id, changePasswordDto);
   }
 }
