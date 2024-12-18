@@ -8,6 +8,12 @@ automations:
     if:
       - true  # This runs whenever there is a new commit in the PR
     run:
+    - action: add-label@v1
+        args:
+          label: "something"
+          color: {{ colors.red }}
+        condition: "{{ true }}"  # Only add if no Jira ticket is referenced
+
       # Add cm-changes label only if it doesn't exist
       - action: add-label@v1
         args:
