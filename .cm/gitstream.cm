@@ -3,19 +3,10 @@ manifest:
   version: 1.0
 
 automations:
-  run_each_time:
-    if:
-      - true
-    run:
-      - action: add-label@v1
-        args:
-          label: "new-commit"
-          color: {{ colors.yellow }}
-
   # Inform PR authors when they fail to reference Jira tickets in the PR title or description.
   label_missing_jira_info:
     if:
-      - {{ not has.jira_ticket_in_desc }}  # If no Jira ticket in description
+      - true # If no Jira ticket in description
     run:
       - action: add-label@v1
         args:
