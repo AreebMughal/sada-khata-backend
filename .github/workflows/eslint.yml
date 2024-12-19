@@ -33,6 +33,19 @@ jobs:
         run: |
           TOTAL_ERRORS=$(jq '[.[] | .errorCount] | add' eslint-report.json)
           echo "Total Errors: $TOTAL_ERRORS"
+
+          LABEL_NAME="eslint-errors"
+          LABEL_COLOR="d73a4a"
+          LABEL_DESCRIPTION="ESLint errors detected in the PR"
+
+          if ! gh label list | grep -q "^$LABEL_NAME\s"; then
+            echo "Label '$LABEL_NAME' does not exist. Creating it..."
+            gh label create "$LABEL_NAME" --color "$LABEL_COLOR" --description "$LABEL_DESCRIPTION"
+          else
+            echo "Label '$LABEL_NAME' already exists."
+          fi
+
+
           if [ "$TOTAL_ERRORS" -gt 0 ]; then
             echo "ESLint found $TOTAL_ERRORS errors."
             gh pr edit ${{ github.event.pull_request.number }} --add-label "eslint-errors"
@@ -40,3 +53,9 @@ jobs:
           else
             echo "No ESLint errors found."
           fi
+
+      # - name: Add label for missing JIRA
+      #   - uses: add-label@v1
+      #     args:
+      #       label: "missing-jira"
+      #       color: {{ colors.red }}
