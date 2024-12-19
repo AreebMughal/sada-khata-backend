@@ -4,7 +4,6 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 
-
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -12,12 +11,11 @@ export class AuthController {
 
   @Post('sign-up')
   async register(@Body() register: CreateUserDto, hre: any) {
-    
     let var1;
     if (register.username === '') {
       var1 = 'Username is required';
     } else {
-      var1 = ''
+      var1 = '';
     }
     console.log(var1);
     return this.authService.signUp(register);

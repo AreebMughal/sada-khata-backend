@@ -2,7 +2,7 @@ import {
   ExceptionFilter,
   Catch,
   ArgumentsHost,
-  HttpException,
+  HttpException
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
@@ -19,7 +19,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message: exception.message || 'An error occurred',
       statusCode: status,
       timestamp: new Date().toISOString(),
-      path: request.url,
+      path: request.url
     });
   }
 }

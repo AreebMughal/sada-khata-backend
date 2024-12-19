@@ -1,0 +1,17 @@
+npx --no -- commitlint --edit "$1" || {
+  echo
+  echo -e "\033[1;31m🚨 Commit message does not follow the correct pattern! 🚨\033[0m"
+  echo
+  echo -e "\033[1mCommit message must follow this format:\033[0m"
+  echo -e "  \033[1;33m<type>: <description>\033[0m"
+  echo
+  echo -e "\033[1mExamples:\033[0m"
+  echo -e "  \033[1;32mfeat: add new login endpoint\033[0m"
+  echo -e "  \033[1;32mfix: correct API path in user service\033[0m"
+  echo -e "  \033[1;32mdocs: update README with installation steps\033[0m"
+  echo
+  echo -e "\033[1mValid types:\033[0m \033[1;36mfeat, fix, docs, style, refactor, test, chore, revert\033[0m"
+  echo -e "\033[1;31mPlease try again.\033[0m"
+  echo
+  exit 1
+}

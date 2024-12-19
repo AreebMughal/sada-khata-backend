@@ -15,11 +15,10 @@ export interface Response<T> {
 export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
   intercept(
     context: ExecutionContext,
-    next: CallHandler,
+    next: CallHandler
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((value: any) => {
-        
         let totalRecords = undefined;
         if (Array.isArray(value.data) && value.totalRecords) {
           totalRecords = value?.totalRecords ? value.totalRecords : 0;
@@ -41,7 +40,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
               ? value.data
               : value?.message
                 ? []
-                : value,
+                : value
         };
       })
     );

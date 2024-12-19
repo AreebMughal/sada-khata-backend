@@ -5,7 +5,7 @@ import {
   Param,
   Put,
   Delete,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,7 +14,7 @@ import {
   ApiTags,
   ApiOperation,
   ApiResponse,
-  ApiBearerAuth,
+  ApiBearerAuth
 } from '@nestjs/swagger';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
@@ -37,7 +37,7 @@ export class UserController {
   async CreateUser(@Body() createUserDto: CreateUserDto) {
     const HelloThere = {
       username: 'HelloThere',
-      hii: 's',
+      hii: 's'
     };
     console.log('HelloThere', HelloThere);
     return this.userService.createUser(createUserDto);
@@ -50,7 +50,7 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'User updated successfully.' })
   async updateUser(
     @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateUserDto
   ) {
     return this.userService.updateUser(id, updateUserDto);
   }
@@ -71,7 +71,7 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Password changed successfully.' })
   async changePassword(
     @Param('id') id: string,
-    @Body() changePasswordDto: ChangePasswordDto,
+    @Body() changePasswordDto: ChangePasswordDto
   ) {
     return this.userService.changePassword(id, changePasswordDto);
   }
