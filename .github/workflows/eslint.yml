@@ -15,7 +15,10 @@ jobs:
         run: npm install
 
       - name: Run ESLint
-        run: npx eslint . --format json --output-file eslint-report.json || true
+        run: npx eslint . --format json --output-file eslint-report.json
+
+      - name: Debug ESLint Report
+        run: cat eslint-report.json
 
       - name: ReviewDog - Report ESLint Suggestions
         uses: reviewdog/action-eslint@v1
@@ -26,13 +29,30 @@ jobs:
           fail_level: error # Ensure workflow doesn't stop on errors
           filter_mode: added # Only show comments on added/modified lines
 
+      # - name: Fail Workflow on ESLint Errors
+      #   if: always()
+      #   run: |
+      #     ERROR_COUNT=$(jq '[.[] | select(.severity == 2)] | length' < eslint-report.json)
+      #     echo "::error::Found $ERROR_COUNT ESLint errors. Blocking PR merge."
+      #     if [ "$ERROR_COUNT" -gt 0 ]; then
+      #       echo "::error::Found $ERROR_COUNT ESLint errors. Blocking PR merge."
+      #       exit 1
+      #     else
+      #       echo "No ESLint errors found. Workflow passed."
+      #     fi
+
       - name: Fail Workflow on ESLint Errors
         if: always()
         run: |
+          if [ ! -s eslint-report.json ]; then
+            echo "::error::eslint-report.json is empty. ESLint may have failed to run correctly."
+            exit 1
+          fi
+
           ERROR_COUNT=$(jq '[.[] | select(.severity == 2)] | length' < eslint-report.json)
           echo "::error::Found $ERROR_COUNT ESLint errors. Blocking PR merge."
+
           if [ "$ERROR_COUNT" -gt 0 ]; then
-            echo "::error::Found $ERROR_COUNT ESLint errors. Blocking PR merge."
             exit 1
           else
             echo "No ESLint errors found. Workflow passed."
