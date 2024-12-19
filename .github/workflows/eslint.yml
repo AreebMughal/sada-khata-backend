@@ -28,6 +28,8 @@ jobs:
 
       - name: Check for ESLint errors & add label
         if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TOTAL_ERRORS=$(jq '[.[] | .errorCount] | add' eslint-report.json)
           echo "Total Errors: $TOTAL_ERRORS"
