@@ -28,23 +28,38 @@ jobs:
           fail_level: error # Ensure workflow doesn't stop on errors
           filter_mode: added # Only show comments on added/modified lines
 
-      - name: Fail Workflow on ESLint Errors
-        if: always()
+      - name: Calculate Total Errors
         run: |
-          if [ ! -s eslint-report.json ]; then
-            echo "::error::eslint-report.json is empty. ESLint may have failed to run correctly."
-            exit 1
-          fi
-          cat eslint-report.json
+          TOTAL_ERRORS=$(jq '[.[] | .errorCount] | add' eslint-report.json)
+          echo "Total Errors: $TOTAL_ERRORS"
+          echo "TOTAL_ERRORS=$TOTAL_ERRORS" >> $GITHUB_ENV
 
-          ERROR_COUNT=$(jq '[.[] | select(.severity == 1)] | length' < eslint-report.json)
-          echo "::error::==> Found $ERROR_COUNT ESLint errors."
-
-          if [ "$ERROR_COUNT" -gt 0 ]; then
+      - name: Fail if there are errors
+        run: |
+          if [ "$TOTAL_ERRORS" -gt 0 ]; then
+            echo "ESLint found $TOTAL_ERRORS errors."
             exit 1
           else
-            echo "No ESLint errors found. Workflow passed."
+            echo "No ESLint errors found."
           fi
+      # - name: Fail Workflow on ESLint Errors
+      #   if: always()
+      #   run: |
+      #     if [ ! -s eslint-report.json ]; then
+      #       echo "::error::eslint-report.json is empty. ESLint may have failed to run correctly."
+      #       exit 1
+      #     fi
+      #     cat eslint-report.json
+
+      #     ERROR_COUNT=$(jq '[.[] | select(.severity == 1)] | length' < eslint-report.json)
+      #     echo "::error::==> Found $ERROR_COUNT ESLint errors."
+
+      #     if [ "$ERROR_COUNT" -gt 0 ]; then
+      #       exit 1
+      #     else
+      #       echo "No ESLint errors found. Workflow passed."
+      #     fi
+
       # - name: Fail Workflow on ESLint Errors
       #   if: always()
       #   run: |
