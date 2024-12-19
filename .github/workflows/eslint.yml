@@ -23,7 +23,7 @@ jobs:
           github_token: ${{ secrets.ESLINT_TOKEN }}
           level: info # Show both warnings and errors
           reporter: github-pr-review # Post comments in the PR
-          fail_level: error # Ensure workflow doesn't stop on errors
+          fail_level: warning # Ensure workflow doesn't stop on errors
           filter_mode: added # Only show comments on added/modified lines
 
       - name: Check for ESLint errors & add label
