@@ -29,7 +29,7 @@ jobs:
       - name: Fail Workflow on ESLint Errors
         if: always()
         run: |
-          ERROR_COUNT=$(jq '[.[] | select(.severity >= 1)] | length' < eslint-report.json)
+          ERROR_COUNT=$(jq '[.[] | select(.severity == 2)] | length' < eslint-report.json)
           if [ "$ERROR_COUNT" -gt 0 ]; then
             echo "::error::Found $ERROR_COUNT ESLint errors. Blocking PR merge."
             exit 1
