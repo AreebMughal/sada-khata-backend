@@ -1,7 +1,7 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
+  NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,7 +15,7 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: Repository<User>
   ) {}
 
   // Create User
@@ -29,7 +29,7 @@ export class UserService {
     // }
 
     const existingUser = await this.userRepository.findOne({
-      where: { username },
+      where: { username }
     });
     if (existingUser) {
       throw new BadRequestException('Username already in use');
@@ -38,7 +38,7 @@ export class UserService {
     // Create and save user
     const user = this.userRepository.create({
       ...createUserDto,
-      password,
+      password
     });
     return this.userRepository.save(user);
   }
@@ -67,7 +67,7 @@ export class UserService {
   // Change Password
   async changePassword(
     id: string,
-    changePasswordDto: ChangePasswordDto,
+    changePasswordDto: ChangePasswordDto
   ): Promise<void> {
     const { oldPassword, newPassword } = changePasswordDto;
 

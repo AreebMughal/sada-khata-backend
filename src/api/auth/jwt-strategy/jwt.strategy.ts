@@ -9,7 +9,7 @@ import { IJwtPayload } from 'src/interfaces/jwt.interface';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private configService: ConfigService,
-    private userService: UserService,
+    private userService: UserService
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: IJwtPayload) {
     const { username } = payload;
-    const user = await this.userService.findOneBy({username});
+    const user = await this.userService.findOneBy({ username });
 
     if (!user) {
       throw new UnauthorizedException();

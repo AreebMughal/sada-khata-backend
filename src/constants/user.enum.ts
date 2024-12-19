@@ -1,5 +1,4 @@
 export enum ROLE_TYPE {
-    USER = 'USER',
-    SUPER_ADMIN = 'SUPER_ADMIN',
-  }
-  
+  USER = 'USER',
+  SUPER_ADMIN = 'SUPER_ADMIN'
+}

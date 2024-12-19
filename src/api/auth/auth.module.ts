@@ -12,13 +12,13 @@ import { AuthController } from './auth.controller';
     UserModule,
     PassportModule.register({ defaultStrategy: 'jwt' }), // Register Passport with JWT strategy
     JwtModule.registerAsync({
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: (configService: ConfigService) => ({
-          secret: configService.get<string>('JWT_SECRET'), // Ensure JWT secret is set
-          signOptions: { expiresIn: '1h' },
-        }),
-      }),
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'), // Ensure JWT secret is set
+        signOptions: { expiresIn: '1h' }
+      })
+    })
   ],
   providers: [AuthService, JwtService, JwtStrategy], // Provide JwtStrategy
   controllers: [AuthController],

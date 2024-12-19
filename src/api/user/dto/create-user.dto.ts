@@ -3,13 +3,13 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsStrongPassword,
+  IsStrongPassword
 } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({
     example: 'John Doe',
-    description: 'The first name of the user',
+    description: 'The first name of the user'
   })
   @IsString()
   @IsNotEmpty()
@@ -17,7 +17,7 @@ export class CreateUserDto {
 
   @ApiProperty({
     example: 'John Doe',
-    description: 'The first name of the user',
+    description: 'The first name of the user'
   })
   @IsString()
   @IsOptional()

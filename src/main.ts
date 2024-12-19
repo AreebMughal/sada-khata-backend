@@ -22,7 +22,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   app.enableCors();
-  
+
   const port = process.env.PORT || 5000;
   await app.listen(port);
 
