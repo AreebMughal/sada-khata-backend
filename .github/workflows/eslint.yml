@@ -17,8 +17,6 @@ jobs:
       - name: Run ESLint
         run: npx eslint . --format json --output-file eslint-report.json || true
 
-      # - name: Debug ESLint Report
-      #   run: cat eslint-report.json
       - name: ReviewDog - Report ESLint Suggestions
         uses: reviewdog/action-eslint@v1
         with:
@@ -28,65 +26,15 @@ jobs:
           fail_level: error # Ensure workflow doesn't stop on errors
           filter_mode: added # Only show comments on added/modified lines
 
-      - name: Calculate Total Errors
+      - name: Check for ESLint errors & add label
         if: always()
         run: |
           TOTAL_ERRORS=$(jq '[.[] | .errorCount] | add' eslint-report.json)
           echo "Total Errors: $TOTAL_ERRORS"
-          echo "TOTAL_ERRORS=$TOTAL_ERRORS" >> $GITHUB_ENV
-
-      - name: Fail if there are errors
-        if: always()
-        run: |
           if [ "$TOTAL_ERRORS" -gt 0 ]; then
             echo "ESLint found $TOTAL_ERRORS errors."
+            gh pr edit ${{ github.event.pull_request.number }} --add-label "eslint-errors"
             exit 1
           else
             echo "No ESLint errors found."
-          fi
-
-      # - name: Fail Workflow on ESLint Errors
-      #   if: always()
-      #   run: |
-      #     if [ ! -s eslint-report.json ]; then
-      #       echo "::error::eslint-report.json is empty. ESLint may have failed to run correctly."
-      #       exit 1
-      #     fi
-      #     cat eslint-report.json
-
-      #     ERROR_COUNT=$(jq '[.[] | select(.severity == 1)] | length' < eslint-report.json)
-      #     echo "::error::==> Found $ERROR_COUNT ESLint errors."
-
-      #     if [ "$ERROR_COUNT" -gt 0 ]; then
-      #       exit 1
-      #     else
-      #       echo "No ESLint errors found. Workflow passed."
-      #     fi
-
-      # - name: Fail Workflow on ESLint Errors
-      #   if: always()
-      #   run: |
-      #     ERROR_COUNT=$(jq '[.[] | select(.severity == 2)] | length' < eslint-report.json)
-      #     echo "::error::Found $ERROR_COUNT ESLint errors. Blocking PR merge."
-      #     if [ "$ERROR_COUNT" -gt 0 ]; then
-      #       echo "::error::Found $ERROR_COUNT ESLint errors. Blocking PR merge."
-      #       exit 1
-      #     else
-      #       echo "No ESLint errors found. Workflow passed."
-      #     fi
-
-  block_merge:
-    runs-on: ubuntu-latest
-    needs: eslint # Only run if ESLint check passes
-    steps:
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
-      - name: Check ESLint Report and Block Merge
-        run: |
-          if [ $(jq '[.[] | select(.severity >= 1)] | length' < eslint-report.json) -gt 0 ]; then
-            echo "::error::PR contains ESLint warnings or errors. Merge blocked."
-            exit 1
-          else
-            echo "No ESLint issues found. Proceed with merge."
           fi
