@@ -29,12 +29,14 @@ jobs:
           filter_mode: added # Only show comments on added/modified lines
 
       - name: Calculate Total Errors
+        if: always()
         run: |
           TOTAL_ERRORS=$(jq '[.[] | .errorCount] | add' eslint-report.json)
           echo "Total Errors: $TOTAL_ERRORS"
           echo "TOTAL_ERRORS=$TOTAL_ERRORS" >> $GITHUB_ENV
 
       - name: Fail if there are errors
+        if: always()
         run: |
           if [ "$TOTAL_ERRORS" -gt 0 ]; then
             echo "ESLint found $TOTAL_ERRORS errors."
@@ -42,6 +44,7 @@ jobs:
           else
             echo "No ESLint errors found."
           fi
+
       # - name: Fail Workflow on ESLint Errors
       #   if: always()
       #   run: |
