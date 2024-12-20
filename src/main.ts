@@ -22,11 +22,12 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   app.enableCors();
-  
+
   const port = process.env.PORT || 5000;
   await app.listen(port);
 
   console.info(`Server is running on http://localhost:${port}`);
 }
 
+// eslint-disable-next-line unicorn/prefer-top-level-await
 bootstrap();

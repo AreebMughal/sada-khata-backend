@@ -24,6 +24,6 @@ export class User {
 
   // Virtual field to map `_id` to `id`
   get id(): string {
-    return this._id.toHexString();  // Converts ObjectID to string
+    return this._id.toHexString(); // Converts ObjectID to string
   }
 }

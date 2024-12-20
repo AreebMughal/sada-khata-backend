@@ -10,14 +10,17 @@ import { LoginDto } from './dto/login.dto';
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService,
+    private jwtService: JwtService
   ) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<User> {
     const { password } = createUserDto;
     const salt: string = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
-    return this.userService.createUser({ ...createUserDto, password: hashedPassword });
+    return this.userService.createUser({
+      ...createUserDto,
+      password: hashedPassword
+    });
   }
 
   async validateUser(username: string, password: string): Promise<User> {
@@ -26,7 +29,7 @@ export class AuthService {
       console.log('User not found');
       return null;
     }
-    
+
     const isPasswordValid = bcrypt.compareSync(password, user.password);
     if (isPasswordValid) {
       return user;
@@ -47,7 +50,9 @@ export class AuthService {
     const payload = { username: user.username, sub: user.id };
     return {
       user,
-      access_token: await this.jwtService.signAsync(payload, { secret: process.env.JWT_SECRET }),
+      accessToken: await this.jwtService.signAsync(payload, {
+        secret: process.env.JWT_SECRET
+      })
     };
   }
 }
