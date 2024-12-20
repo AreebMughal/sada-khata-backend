@@ -19,9 +19,9 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((value: any) => {
-        let totalRecords = undefined;
+        let totalRecords;
         if (Array.isArray(value.data) && value.totalRecords) {
-          totalRecords = value?.totalRecords ? value.totalRecords : 0;
+          totalRecords = value?.totalRecords || 0;
         }
 
         return {
@@ -31,7 +31,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
             value?.status && typeof value.status === 'number'
               ? value.status
               : 201,
-          message: value?.message ? value.message : 'Successful',
+          message: value?.message ?? 'Successful',
           data:
             (value?.totalRecords !== null &&
               value?.totalRecords !== undefined &&

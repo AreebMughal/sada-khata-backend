@@ -29,4 +29,5 @@ async function bootstrap() {
   console.info(`Server is running on http://localhost:${port}`);
 }
 
+// eslint-disable-next-line unicorn/prefer-top-level-await
 bootstrap();

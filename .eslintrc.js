@@ -37,7 +37,9 @@ module.exports = {
       },
       {
         selector: 'classProperty',
-        format: ['camelCase', 'UPPER_CASE']
+        format: ['camelCase', 'UPPER_CASE'],
+        leadingUnderscore: 'allow',
+        trailingUnderscore: 'allow'
       },
       {
         selector: 'method',
