@@ -10,19 +10,12 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('sign-up')
-  async register(@Body() register: CreateUserDto, hre: any) {
-    let var1;
-    if (register.username === '') {
-      var1 = 'Username is required';
-    } else {
-      var1 = '';
-    }
-    console.log(var1);
+  async register(@Body() register: CreateUserDto): Promise<any> {
     return this.authService.signUp(register);
   }
 
   @Post('login')
-  async LoginAPI(@Body() loginDto: LoginDto) {
+  async loginAPI(@Body() loginDto: LoginDto): Promise<any> {
     return this.authService.login(loginDto);
   }
 }

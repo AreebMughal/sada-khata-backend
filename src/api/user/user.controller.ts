@@ -34,12 +34,7 @@ export class UserController {
   @Roles(ROLE_TYPE.SUPER_ADMIN)
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({ status: 201, description: 'User created successfully.' })
-  async CreateUser(@Body() createUserDto: CreateUserDto) {
-    const HelloThere = {
-      username: 'HelloThere',
-      hii: 's'
-    };
-    console.log('HelloThere', HelloThere);
+  async createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 

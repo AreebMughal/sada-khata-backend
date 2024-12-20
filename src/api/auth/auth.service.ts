@@ -50,7 +50,7 @@ export class AuthService {
     const payload = { username: user.username, sub: user.id };
     return {
       user,
-      access_token: await this.jwtService.signAsync(payload, {
+      accessToken: await this.jwtService.signAsync(payload, {
         secret: process.env.JWT_SECRET
       })
     };

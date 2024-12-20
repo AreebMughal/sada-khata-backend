@@ -3,19 +3,19 @@ module.exports = {
   parserOptions: {
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,
-    sourceType: 'module',
+    sourceType: 'module'
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
     'plugin:unicorn/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
-    'prettier',
+    'prettier'
   ],
   root: true,
   env: {
     node: true,
-    jest: true,
+    jest: true
   },
   ignorePatterns: ['.eslintrc.js', 'commitlint.config.js'],
   rules: {
@@ -27,22 +27,22 @@ module.exports = {
       'error',
       {
         selector: 'function',
-        format: ['camelCase'],
+        format: ['camelCase']
       },
       {
         selector: 'variable',
         format: ['camelCase', 'UPPER_CASE'],
         leadingUnderscore: 'allow',
-        trailingUnderscore: 'allow',
+        trailingUnderscore: 'allow'
       },
       {
         selector: 'classProperty',
-        format: ['camelCase', 'UPPER_CASE'],
+        format: ['camelCase', 'UPPER_CASE']
       },
       {
         selector: 'method',
-        format: ['camelCase'],
-      },
+        format: ['camelCase']
+      }
     ],
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-unused-vars': 'error',
@@ -51,5 +51,6 @@ module.exports = {
     'no-var': 'error',
     'unicorn/prefer-ternary': 'error', // Suggest using ternary if applicable
     'unicorn/consistent-function-scoping': 'warn', // Avoid unnecessary scope changes
-  },
+    'unicorn/no-null': 'off'
+  }
 };
