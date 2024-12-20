@@ -55,6 +55,7 @@ jobs:
             gh pr edit ${{ github.event.pull_request.number }} --add-label "eslint-errors"
             exit 1
           else
+            gh pr edit ${{ github.event.pull_request.number }} --remove-label "eslint-errors"
             echo "No ESLint errors found."
           fi
 
