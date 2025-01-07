@@ -1,0 +1,43 @@
+name: ESLint Check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npx eslint . --format json --output-file eslint-report.json || true
+
+      - name: ReviewDog - Report ESLint Suggestions
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.ESLINT_TOKEN }}
+          level: info  # Show both warnings and errors
+          reporter: github-pr-review  # Post comments in the PR
+          fail_on_error: false  # Ensure workflow doesn't stop on errors
+          filter_mode: added  # Only show comments on added/modified lines
+
+  block_merge:
+    runs-on: ubuntu-latest
+    needs: eslint  # Only run if ESLint check passes
+    steps:
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Check ESLint Report and Block Merge
+        run: |
+          if [ $(jq '[.[] | select(.severity >= 1)] | length' < eslint-report.json) -gt 0 ]; then
+            echo "::error::PR contains ESLint warnings or errors. Merge blocked."
+            exit 1
+          else
+            echo "No ESLint issues found. Proceed with merge."
+          fi
