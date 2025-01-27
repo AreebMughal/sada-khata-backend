@@ -1,1 +1,15 @@
-npm run pre-commit
+# Run prettier format file on only stagged js files
+echo -e "\033[1m🚀 Running lint-staged...\033[0m"
+npx lint-staged
+echo ""
+
+# Run tests before committing
+# echo "✅ Running tests..."
+# npm test
+
+# Run eslint command to check for errors
+# echo -e "\033[1m🔍 Checking for ESLint errors...\033[0m"
+# if ! npm run lint; then
+# echo -e "\033[1;31m❌ Please fix ESLint errors before committing.\033[0m"
+# exit 1
+# fi

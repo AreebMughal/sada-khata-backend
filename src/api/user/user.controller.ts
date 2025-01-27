@@ -1,3 +1,4 @@
+
 import {
   Controller,
   Post,
@@ -7,21 +8,21 @@ import {
   Delete,
   UseGuards
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth
 } from '@nestjs/swagger';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE_TYPE } from 'src/constants/user.enum';
+
+import { UpdateUserDto } from './dto/update-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UserService } from './user.service';
 
 @ApiTags('Users')
 @Controller('users')

@@ -5,10 +5,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities';
+
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
@@ -28,6 +29,9 @@ export class UserService {
     //   throw new BadRequestException('Email already in use');
     // }
 
+    let variable = 'username';
+    variable = createUserDto.username ? 'username' : 'email';
+    console.log(variable);
     const existingUser = await this.userRepository.findOne({
       where: { username }
     });
