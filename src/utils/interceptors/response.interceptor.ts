@@ -38,9 +38,9 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
               typeof value?.totalRecords === 'number') ||
             value?.data
               ? value.data
-              : value?.message
+              : (value?.message
                 ? []
-                : value
+                : value)
         };
       })
     );

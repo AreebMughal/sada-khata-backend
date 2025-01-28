@@ -1,0 +1,24 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Get the current branch name
+branch_name=$(git rev-parse --abbrev-ref HEAD)
+
+# Define the allowed branch name patterns
+valid_pattern="^(feat|cr|bugfix|hotfix|release|refactor|devex)\/([a-zA-Z0-9\-]+)(-[a-zA-Z0-9\-]+)?$"
+
+# Validate the branch name
+if [[ ! $branch_name =~ $valid_pattern ]]; then
+    echo "🚫 Branch name \"$branch_name\" does not follow the naming convention."
+    echo "Allowed formats:"
+    echo "  - feat/<ticket-id>-<feature-name>"
+    echo "  - cr/<ticket-id>-<feature-name>"
+    echo "  - bugfix/<ticket-id>-<bug-name>"
+    echo "  - hotfix/<ticket-id>-<fix-name>"
+    echo "  - release/<version>"
+    echo "  - refactor/<feature-name>"
+    echo "  - devex/<brief-description>"
+    exit 1
+fi
+
+echo "✅ Branch name \"$branch_name\" follows the naming convention."
